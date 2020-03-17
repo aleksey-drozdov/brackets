@@ -6,25 +6,31 @@ module.exports = function check(str, bracketsConfig) {
   var open = '';
   var close = '';
   var stock = [];
-  //получаем все открывающие скобки
   for (let i = 0; i < bracketsConfig.length; i++) {
     open = open + bracketsConfig[i][0];
   }
-  //получаем все закрывающие скобки
   for (let i = 0; i < bracketsConfig.length; i++) {
     close = close + bracketsConfig[i][1];
   }
   for (let i = 0; i < str.length; i++) {
-    if (open.includes(str[i])) {
+    if (open.includes(str[i]) && !close.includes(str[i])) {
       stock.push(str[i]);
-    } else if (stock.length == 0) {
-      console.log("false");
-      return false
-    } else if (open.indexOf(stock[stock.length - 1]) !== close.indexOf(str[i])) {
-      console.log('false');
-      return false
+    } else if (close.includes(str[i]) && !open.includes(str[i])) {
+      if (open.indexOf(stock[stock.length - 1]) == close.indexOf(str[i])) {
+        stock.pop();
+      } else {
+
+      }
+    } else if (open.includes(str[i]) && close.includes(str[i])) {
+      if (stock[stock.length - 1] == str[i]) {
+        stock.pop();
+      } else {
+        stock.push(str[i]);
+      }
     }
   }
-  console.log('true');
-  console.log('end')
+  if (stock.length == 0) {
+    return true
+  }
+  return false
 }
